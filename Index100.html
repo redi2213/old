@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html manifest="cache.appcache">
+<head>
+  <meta charset="utf-8">
+  <title>PS4 Exploit Host</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: sans-serif;
+      text-align: center;
+      margin-top: 10%;
+    }
+    #progress {
+      font-size: 24px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>در حال آماده‌سازی آفلاین جیلبریک PS4</h1>
+  <div id="progress">در حال ذخیره فایل‌ها...</div>
+
+  <script>
+    // اگر قبلاً کش شده بود، مستقیم بره به main.html
+    if (localStorage.getItem("ps4CacheReady") === "true") {
+      window.location.href = "main.html";
+    }
+
+    const progressText = document.getElementById("progress");
+
+    function updateProgress(status) {
+      progressText.innerText = status;
+    }
+
+    // پیشرفت کش آفلاین
+    window.applicationCache.addEventListener('downloading', function () {
+      updateProgress("🔄 شروع کش فایل‌ها...");
+    });
+
+    window.applicationCache.addEventListener('progress', function (e) {
+      const percent = Math.floor((e.loaded / e.total) * 100);
+      updateProgress(`⬇️ ذخیره فایل‌ها: ${percent}%`);
+    });
+
+    window.applicationCache.addEventListener('cached', function () {
+      updateProgress("✅ کش فایل‌ها کامل شد!");
+      alert("فایل‌ها با موفقیت کش شدند.\nاکنون اینترنت را خاموش کرده و این صفحه را دوباره باز کنید.");
+      localStorage.setItem("ps4CacheReady", "true");
+    });
+
+    window.applicationCache.addEventListener('noupdate', function () {
+      updateProgress("✔️ همه‌چیز قبلاً کش شده بود.");
+      localStorage.setItem("ps4CacheReady", "true");
+      window.location.href = "main.html";
+    });
+
+    window.applicationCache.addEventListener('error', function () {
+      updateProgress("❌ خطا در کش کردن فایل‌ها. اتصال اینترنت بررسی شود.");
+    });
+  </script>
+</body>
+</html>

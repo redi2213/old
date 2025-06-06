@@ -1,0 +1,10 @@
+CACHE MANIFEST
+# نسخه: 1.0
+
+CACHE:
+index.html
+main.html
+hen.bin
+
+NETWORK:
+*

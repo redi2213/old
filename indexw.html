@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>PS4 Exploit Host (Service Worker)</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: sans-serif;
+      text-align: center;
+      margin-top: 10%;
+    }
+  </style>
+</head>
+<body>
+  <h1>جیلبریک PS4</h1>
+  <p id="status">در حال آماده‌سازی کش آفلاین...</p>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').then(function(reg) {
+        document.getElementById("status").innerText = "✅ آماده شد! در حال هدایت به صفحه جیلبریک...";
+        setTimeout(() => {
+          window.location.href = 'main.html';
+        }, 2000);
+      }).catch(function(err) {
+        document.getElementById("status").innerText = "❌ خطا در ثبت Service Worker";
+        console.error(err);
+      });
+    } else {
+      document.getElementById("status").innerText = "⛔ مرورگر شما Service Worker پشتیبانی نمی‌کند.";
+    }
+  </script>
+</body>
+</html>

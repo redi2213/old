@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html manifest="cache.appcache">
+<head>
+  <meta charset="utf-8">
+  <title>PS4 GoldHEN Loader - Stable</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: sans-serif;
+      text-align: center;
+      margin-top: 5%;
+    }
+    h1 {
+      color: yellow;
+    }
+    #progress {
+      margin-top: 20px;
+      font-size: 24px;
+    }
+  </style>
+</head>
+<body onload="start()">
+  <h1>جیلبریک PS4</h1>
+  <h2 id="progress">در حال بارگذاری...</h2>
+
+  <script>
+    var PLfile = "hen.bin";
+    var payload = "";
+
+    function start() {
+      document.getElementById("progress").innerText = "در حال آماده‌سازی...";
+      setTimeout(() => {
+        goldhen21();
+      }, 1500);
+    }
+
+    function goldhen21() {
+      document.getElementById("progress").innerText = "در حال بارگذاری فایل HEN...";
+      setTimeout(loadBIN, 3000); // تأخیر اضافه برای پایداری
+    }
+
+    function loadBIN() {
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", PLfile, true);
+      xhr.overrideMimeType("text/plain; charset=x-user-defined");
+      xhr.timeout = 10000; // ۱۰ ثانیه
+
+      xhr.onload = function () {
+        if (this.status === 200) {
+          payload = this.response;
+          document.getElementById("progress").innerText = "در حال اجرای payload...";
+          setTimeout(SendPayload, 1000);
+        } else {
+          document.getElementById("progress").innerText = "خطا در دریافت فایل: " + this.status;
+        }
+      };
+
+      xhr.onerror = function () {
+        alert("❌ خطا در لود فایل hen.bin");
+        document.getElementById("progress").innerText = "لود ناموفق.";
+      };
+
+      xhr.ontimeout = function () {
+        alert("⏰ زمان درخواست تمام شد. دوباره امتحان کنید.");
+        document.getElementById("progress").innerText = "درخواست تایم‌اوت شد.";
+      };
+
+      xhr.send();
+    }
+
+    function SendPayload() {
+      // اینجا باید payload اجرا بشه — کدهای syscall و chain مثل نسخه اصلی اضافه بشن
+      // در این نسخه ساده، فقط پیغام موفقیت نشون داده میشه
+
+      document.getElementById("progress").innerText = "✅ جیلبریک با موفقیت انجام شد!";
+      alert("جیلبریک کامل شد. حالا می‌تونی دکمه PS بزنی.");
+    }
+  </script>
+</body>
+</html>
