@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>PS4 Jailbreak - Service Worker Embedded</title>
+  <style>
+    body {
+      background-color: black;
+      color: white;
+      font-family: sans-serif;
+      text-align: center;
+      margin-top: 10%;
+    }
+    #status {
+      margin-top: 20px;
+      font-size: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>جیلبریک PS4</h1>
+  <p id="status">در حال آماده‌سازی کش آفلاین...</p>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      const swCode = `
+        const cacheName = 'ps4-jb-v1';
+        const cacheFiles = [
+          '/index.html',
+          '/main.html',
+          '/hen.bin'
+        ];
+
+        self.addEventListener('install', (event) => {
+          event.waitUntil(
+            caches.open(cacheName).then((cache) => {
+              return cache.addAll(cacheFiles);
+            })
+          );
+        });
+
+        self.addEventListener('fetch', (event) => {
+          event.respondWith(
+            caches.match(event.request).then((response) => {
+              return response || fetch(event.request);
+            })
+          );
+        });
+      `;
+
+      const blob = new Blob([swCode], { type: 'application/javascript' });
+      const swURL = URL.createObjectURL(blob);
+
+      navigator.serviceWorker.register(swURL).then(function (reg) {
+        document.getElementById("status").innerText = "✅ کش کامل شد! در حال انتقال به جیلبریک...";
+        setTimeout(() => {
+          window.location.href = 'main.html';
+        }, 2000);
+      }).catch(function (err) {
+        document.getElementById("status").innerText = "❌ خطا در ثبت Service Worker";
+        console.error(err);
+      });
+    } else {
+      document.getElementById("status").innerText = "⛔ مرورگر از Service Worker پشتیبانی نمی‌کند.";
+    }
+  </script>
+</body>
+</html>
